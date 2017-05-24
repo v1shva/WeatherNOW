@@ -1,0 +1,11 @@
+.sebm-google-map-container {
+  height: 300px;
+}
+
+.weatherinfo{
+  width:100%;
+}
+
+.weatherImage{
+  float:left;
+}

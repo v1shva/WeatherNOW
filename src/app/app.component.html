@@ -1,29 +1,21 @@
-<h3>
-  Angular 2 Seed
-</h3>
-<nav>
-	<a [routerLink]="['/']">
-    Home
-  </a>
-  |
-	<a [routerLink]="['/about']">
-    About
-  </a>
-  |
-	<a [routerLink]="['/github', 'angular']">
-    Github Repos
-  </a>
-  |
-	<a [routerLink]="['/contact']">
-    Contact Us
-  </a>
-</nav>
+<h1>{{ title }}</h1>
 
-<main>
-	<router-outlet></router-outlet>
-</main>
+<!-- this creates a google map on the page with the given lat/lng from -->
+<!-- the component as the initial center of the map: -->
+<h2>Select your Location</h2>
+<h3>Select a location from map</h3>
+<sebm-google-map [latitude]="lat" [longitude]="lng">
+  <sebm-google-map-marker [markerDraggable]="true" [latitude]="lat" [longitude]="lng" [title]="'Select a location'" (dragEnd)="dragEnded($event)"  >
+  </sebm-google-map-marker>
+</sebm-google-map>
+<p>Latitude : {{lat}} Longitude : {{lng}} </p>
 
+<h3>Weather Info</h3>
+<div class="WeatherInfo">
+  <img class="weatherImage" src="{{weatherImageURL}}">
+  <div class="temp"> {{temp}}</div>
+  <div class="feelTemp"> feels : {{feelsLikeTemp}}</div>
+  <div class="weatherText"> {{weatherText}}</div>
+  <div class="city"> {{city}}</div>
+</div>
 
-<footer>
-  © 2016
-</footer>
