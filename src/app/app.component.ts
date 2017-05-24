@@ -17,6 +17,7 @@ export class AppComponent {
   weatherText = '';
   temp = '';
   feelsLikeTemp = '';
+  error = '';
 
   @ViewChild(SebmGoogleMapMarker) private marker: SebmGoogleMapMarker; // get the marker from template
 
@@ -28,6 +29,14 @@ export class AppComponent {
         this.city = city.long_name;
         console.log(city.long_name);
         this.weatherService.getWeather(city.long_name).subscribe(weatherData => this.updateWeatherData(weatherData));
+      }
+      else{
+        this.weatherImageURL = '';
+        this.weatherText = '';
+        this.temp = '';
+        this.feelsLikeTemp = '';
+        this.city = '';
+        this.error = 'Could not find a close city';
       }
     });
   }
@@ -45,19 +54,32 @@ export class AppComponent {
         var city = addressList[addressList.length - 3].address_components[0];
         this.city = city.long_name;
         console.log(city.long_name);
-        this.weatherService.getWeather(city.long_name).subscribe(weatherData => this.updateWeatherData(weatherData));
+        this.weatherService.getWeather(city.long_name).subscribe(weatherData =>
+          this.updateWeatherData(weatherData), (err) =>
+          this.handleError('Could not find weather details for ' + this.city));
+      } else {
+        this.handleError('Could not find close city');
       }
     });
   }
   updateWeatherData(weatherDataRes): void {
-    this.weatherImageURL = weatherDataRes.current.condition.icon;
-    this.weatherText = weatherDataRes.current.condition.text;
-    this.temp = weatherDataRes.current.temp_c;
-    this.feelsLikeTemp = weatherDataRes.current.feelslike_c;
+    console.log(weatherDataRes);
+    if (typeof weatherDataRes.current !== 'undefined'){
+      this.weatherImageURL = weatherDataRes.current.condition.icon;
+      this.weatherText = weatherDataRes.current.condition.text;
+      this.temp = weatherDataRes.current.temp_c;
+      this.feelsLikeTemp = weatherDataRes.current.feelslike_c;
+      this.error = '';
+    } else {
+      this.handleError('Could not find weather data for that city');
+    }
   }
-  updateMarkerPosition(marker: SebmGoogleMapMarker, lat: number, lng: number): void {
-    alert(marker);
-    /*marker.latitude = lat;
-    marker.longitude = lng;*/
+  handleError(errorMsg): void{
+    this.weatherImageURL = '';
+    this.weatherText = '';
+    this.temp = '';
+    this.feelsLikeTemp = '';
+    this.city = '';
+    this.error = errorMsg;
   }
 }
