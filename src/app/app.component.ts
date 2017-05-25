@@ -13,6 +13,7 @@ export class AppComponent {
   lat = 6.9680047;
   lng = 79.91952896;
   city = '';
+  cityTemp = '';
   weatherImageURL = '';
   weatherText = '';
   temp = '';
@@ -27,6 +28,8 @@ export class AppComponent {
         let addressList = val.results;
         var city = addressList[addressList.length - 3].address_components[0];
         this.city = city.long_name;
+        this.cityTemp = city.long_name;
+        this.handleError('Please wait ... Data is being fetched.');
         console.log(city.long_name);
         this.weatherService.getWeather(city.long_name).subscribe(weatherData => this.updateWeatherData(weatherData));
       }
@@ -53,6 +56,7 @@ export class AppComponent {
         let addressList = val.results;
         var city = addressList[addressList.length - 3].address_components[0];
         this.city = city.long_name;
+        this.handleError('Please wait ... Data is being fetched.');
         console.log(city.long_name);
         this.weatherService.getWeather(city.long_name).subscribe(weatherData =>
           this.updateWeatherData(weatherData), (err) =>
@@ -69,6 +73,7 @@ export class AppComponent {
       this.weatherText = weatherDataRes.current.condition.text;
       this.temp = weatherDataRes.current.temp_c;
       this.feelsLikeTemp = weatherDataRes.current.feelslike_c;
+      this.city = this.cityTemp;
       this.error = '';
     } else {
       this.handleError('Could not find weather data for that city');
